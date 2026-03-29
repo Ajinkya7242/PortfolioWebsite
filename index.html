@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+img,svg{display:block;max-width:100%;}
 
 :root{
   --bg:#0A0A0F;
@@ -19,507 +20,357 @@
   --accent2:#F7A26A;
   --accent3:#6AF7C8;
   --white:#FFFFFF;
+  --px:clamp(1.25rem,5vw,4rem);
+  --mw:1120px;
 }
 
 html{scroll-behavior:smooth;}
-
 body{
-  background:var(--bg);
-  color:var(--ink);
-  font-family:'Syne',sans-serif;
-  font-size:16px;
-  line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
+  background:var(--bg);color:var(--ink);
+  font-family:'Syne',sans-serif;font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
-
-/* ── NOISE OVERLAY ── */
 body::before{
-  content:'';
-  position:fixed;
-  inset:0;
+  content:'';position:fixed;inset:0;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events:none;
-  z-index:999;
-  opacity:0.4;
+  pointer-events:none;z-index:999;opacity:0.35;
 }
 
-/* ── GLOW ORBS ── */
-.orb{
-  position:fixed;
-  border-radius:50%;
-  filter:blur(100px);
-  pointer-events:none;
-  z-index:0;
-  opacity:0.18;
-}
-.orb1{width:600px;height:600px;background:var(--accent);top:-200px;right:-100px;animation:drift1 12s ease-in-out infinite;}
-.orb2{width:400px;height:400px;background:var(--accent2);bottom:10%;left:-100px;animation:drift2 15s ease-in-out infinite;}
-.orb3{width:300px;height:300px;background:var(--accent3);top:50%;left:50%;animation:drift3 10s ease-in-out infinite;}
+/* ORBS */
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.15;}
+.orb1{width:min(600px,90vw);height:min(600px,90vw);background:var(--accent);top:-200px;right:-100px;animation:d1 12s ease-in-out infinite;}
+.orb2{width:min(400px,70vw);height:min(400px,70vw);background:var(--accent2);bottom:10%;left:-100px;animation:d2 15s ease-in-out infinite;}
+.orb3{width:min(300px,60vw);height:min(300px,60vw);background:var(--accent3);top:50%;left:50%;animation:d3 10s ease-in-out infinite;}
+@keyframes d1{0%,100%{transform:translate(0,0);}50%{transform:translate(-40px,60px);}}
+@keyframes d2{0%,100%{transform:translate(0,0);}50%{transform:translate(60px,-40px);}}
+@keyframes d3{0%,100%{transform:translate(-50%,-50%);}50%{transform:translate(-50%,-60%) scale(1.1);}}
 
-@keyframes drift1{0%,100%{transform:translate(0,0);}50%{transform:translate(-40px,60px);}}
-@keyframes drift2{0%,100%{transform:translate(0,0);}50%{transform:translate(60px,-40px);}}
-@keyframes drift3{0%,100%{transform:translate(-50%,-50%);}50%{transform:translate(-50%,-60%) scale(1.1);}}
+/* CONTAINER */
+.wrap{max-width:var(--mw);margin:0 auto;padding:0 var(--px);position:relative;z-index:1;}
 
-/* ── LAYOUT ── */
-.container{max-width:1120px;margin:0 auto;padding:0 5vw;position:relative;z-index:1;}
-
-/* ── NAV ── */
+/* ─── NAV ─── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:1.2rem 0;
+  padding:0.9rem 0;
   border-bottom:1px solid rgba(255,255,255,0.04);
-  background:rgba(10,10,15,0.7);
-  backdrop-filter:blur(20px);
+  background:rgba(10,10,15,0.8);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
 }
-.nav-inner{
-  max-width:1120px;margin:0 auto;padding:0 5vw;
-  display:flex;align-items:center;justify-content:space-between;
+.nav-in{
+  max-width:var(--mw);margin:0 auto;padding:0 var(--px);
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
 }
 .nav-logo{
   font-family:'Instrument Serif',serif;
-  font-size:1.15rem;
-  color:var(--ink);
-  text-decoration:none;
-  letter-spacing:0.01em;
+  font-size:clamp(0.95rem,2.5vw,1.15rem);
+  color:var(--ink);text-decoration:none;flex-shrink:0;
 }
-.nav-logo span{color:var(--accent);}
+.nav-logo b{color:var(--accent);font-weight:400;}
 .nav-pill{
-  display:flex;align-items:center;gap:0.3rem;
+  display:flex;align-items:center;gap:0.35rem;
   background:rgba(124,106,247,0.12);
   border:1px solid rgba(124,106,247,0.25);
   color:var(--accent);
-  font-size:0.72rem;font-weight:600;
-  letter-spacing:0.08em;text-transform:uppercase;
-  padding:0.4rem 1rem;
-  border-radius:99px;
-  text-decoration:none;
+  font-size:clamp(0.58rem,1.5vw,0.72rem);font-weight:600;
+  letter-spacing:0.06em;text-transform:uppercase;
+  padding:0.38rem 0.85rem;border-radius:99px;
+  text-decoration:none;white-space:nowrap;
   transition:background 0.2s,border-color 0.2s;
 }
-.nav-pill:hover{background:rgba(124,106,247,0.2);border-color:rgba(124,106,247,0.5);}
-.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--accent3);animation:blink 2s ease-in-out infinite;}
+.nav-pill:hover{background:rgba(124,106,247,0.22);border-color:rgba(124,106,247,0.5);}
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--accent3);flex-shrink:0;animation:blink 2s ease-in-out infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
 
-/* ── HERO ── */
+/* ─── HERO ─── */
 #hero{
-  min-height:100vh;
-  display:flex;align-items:center;
-  padding:120px 0 80px;
-  position:relative;
-}
-.hero-content{position:relative;z-index:2;}
-
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:0.6rem;
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.75rem;
-  color:var(--accent3);
-  margin-bottom:2rem;
-  opacity:0;
-  animation:fadeUp 0.8s 0.1s both;
-}
-.hero-eyebrow::before{content:'>';color:var(--accent);}
-
-.hero-name{
-  font-family:'Instrument Serif',serif;
-  font-size:clamp(3.5rem,8vw,7.5rem);
-  line-height:0.95;
-  letter-spacing:-0.03em;
-  margin-bottom:0.5rem;
-  opacity:0;
-  animation:fadeUp 0.9s 0.2s both;
-}
-.hero-name .line2{
-  display:block;
-  font-style:italic;
-  color:var(--muted);
-  padding-left:3rem;
-}
-
-.hero-role{
-  font-family:'JetBrains Mono',monospace;
-  font-size:clamp(0.85rem,1.5vw,1rem);
-  color:var(--muted);
-  margin:2rem 0 2.5rem;
-  display:flex;align-items:center;gap:1rem;
-  opacity:0;
-  animation:fadeUp 0.9s 0.3s both;
-}
-.hero-role::before{content:'';width:40px;height:1px;background:var(--border);}
-
-.hero-desc{
-  font-size:1.05rem;
-  color:var(--muted);
-  max-width:520px;
-  line-height:1.8;
-  margin-bottom:3rem;
-  font-weight:400;
-  opacity:0;
-  animation:fadeUp 0.9s 0.4s both;
-}
-.hero-desc strong{color:var(--ink);font-weight:600;}
-
-.hero-actions{
-  display:flex;gap:0.75rem;
-  opacity:0;
-  animation:fadeUp 0.9s 0.5s both;
-}
-.btn-primary{
-  background:var(--accent);
-  color:var(--white);
-  font-family:'Syne',sans-serif;
-  font-size:0.85rem;font-weight:600;
-  padding:0.85rem 2rem;
-  border-radius:8px;
-  text-decoration:none;
-  transition:transform 0.2s,box-shadow 0.2s;
-  box-shadow:0 0 30px rgba(124,106,247,0.3);
-}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 40px rgba(124,106,247,0.5);}
-.btn-outline{
-  color:var(--muted);
-  border:1px solid var(--border);
-  font-family:'Syne',sans-serif;
-  font-size:0.85rem;font-weight:500;
-  padding:0.85rem 2rem;
-  border-radius:8px;
-  text-decoration:none;
-  transition:all 0.2s;
-}
-.btn-outline:hover{border-color:rgba(255,255,255,0.2);color:var(--ink);}
-
-/* HERO STATS */
-.hero-stats{
-  position:absolute;right:0;top:50%;transform:translateY(-50%);
-  display:flex;flex-direction:column;gap:1px;
-  background:var(--border);
-  border:1px solid var(--border);
-  border-radius:16px;
-  overflow:hidden;
-  opacity:0;
-  animation:fadeUp 0.9s 0.6s both;
-}
-.stat-box{
-  background:var(--surface);
-  padding:1.5rem 2rem;
-  text-align:center;
-  transition:background 0.2s;
-}
-.stat-box:hover{background:var(--surface2);}
-.stat-n{
-  font-family:'Instrument Serif',serif;
-  font-size:2.4rem;
-  line-height:1;
-  color:var(--ink);
-  margin-bottom:0.3rem;
-}
-.stat-n span{color:var(--accent);}
-.stat-l{font-size:0.7rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;}
-
-/* SCROLL INDICATOR */
-.scroll-hint{
-  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:0.5rem;
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;
-  text-transform:uppercase;
-  animation:fadeUp 1s 0.9s both;
-}
-.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollDown 2s ease-in-out infinite;}
-@keyframes scrollDown{0%,100%{opacity:0.4;transform:scaleY(1);}50%{opacity:1;transform:scaleY(0.6);}}
-
-/* SECTION ── */
-section{padding:100px 0;position:relative;z-index:1;}
-.section-label{
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.7rem;color:var(--accent);
-  letter-spacing:0.12em;text-transform:uppercase;
-  margin-bottom:3rem;
-  display:flex;align-items:center;gap:1rem;
-}
-.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-
-/* ── ABOUT ── */
-#about{border-top:1px solid var(--border);}
-.about-grid{display:grid;grid-template-columns:1fr 380px;gap:5rem;align-items:start;}
-.about-heading{
-  font-family:'Instrument Serif',serif;
-  font-size:clamp(1.8rem,3vw,2.8rem);
-  line-height:1.2;
-  letter-spacing:-0.02em;
-  margin-bottom:1.5rem;
-}
-.about-heading em{font-style:italic;color:var(--accent);}
-.about-text{font-size:0.95rem;color:var(--muted);line-height:1.85;margin-bottom:1rem;font-weight:400;}
-.about-text strong{color:var(--ink);font-weight:600;}
-
-.about-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:16px;
-  overflow:hidden;
-}
-.about-photo{
-  width:100%;height:220px;object-fit:cover;object-position:top center;
-  display:block;
-  filter:grayscale(20%);
-}
-.about-info{padding:1.5rem;}
-.info-row{
-  display:flex;justify-content:space-between;align-items:start;
-  padding:0.75rem 0;
-  border-bottom:1px solid var(--border);
-  font-size:0.82rem;
-}
-.info-row:last-child{border-bottom:none;}
-.info-key{color:var(--muted);}
-.info-val{color:var(--ink);text-align:right;}
-.info-val a{color:var(--accent);text-decoration:none;}
-.info-val a:hover{text-decoration:underline;}
-
-/* ── EXPERIENCE ── */
-#experience{border-top:1px solid var(--border);}
-.exp-timeline{display:flex;flex-direction:column;gap:0;}
-
-.exp-item{
-  display:grid;
-  grid-template-columns:200px 1fr;
-  gap:3rem;
-  padding:2.5rem 0;
-  border-bottom:1px solid var(--border);
-  position:relative;
-}
-.exp-item:last-child{border-bottom:none;}
-.exp-item::before{
-  content:'';
-  position:absolute;left:190px;top:0;bottom:0;
-  width:1px;background:var(--border);
-}
-.exp-item::after{
-  content:'';
-  position:absolute;left:186px;top:2.5rem;
-  width:9px;height:9px;border-radius:50%;
-  background:var(--surface);
-  border:1.5px solid var(--border);
-  transition:border-color 0.3s,background 0.3s;
-}
-.exp-item:hover::after{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px rgba(124,106,247,0.6);}
-
-.exp-meta{padding-top:0.1rem;}
-.exp-period{
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.72rem;color:var(--muted);line-height:1.6;
-}
-.exp-badge{
-  display:inline-block;
-  font-size:0.62rem;font-weight:700;
-  letter-spacing:0.08em;text-transform:uppercase;
-  padding:0.2rem 0.6rem;border-radius:4px;
-  margin-top:0.6rem;
-}
-.badge-now{background:rgba(124,106,247,0.15);color:var(--accent);border:1px solid rgba(124,106,247,0.3);}
-.badge-ft{background:rgba(106,247,200,0.1);color:var(--accent3);border:1px solid rgba(106,247,200,0.25);}
-.badge-int{background:rgba(247,162,106,0.1);color:var(--accent2);border:1px solid rgba(247,162,106,0.25);}
-
-.exp-body{}
-.exp-title{
-  font-family:'Instrument Serif',serif;
-  font-size:1.4rem;
-  letter-spacing:-0.01em;
-  margin-bottom:0.2rem;
-}
-.exp-company{font-size:0.82rem;color:var(--muted);margin-bottom:1.2rem;}
-.exp-bullets{list-style:none;display:flex;flex-direction:column;gap:0.5rem;}
-.exp-bullets li{
-  font-size:0.85rem;color:var(--muted);line-height:1.7;
-  padding-left:1.2rem;position:relative;
-}
-.exp-bullets li::before{
-  content:'';
-  position:absolute;left:0;top:0.65em;
-  width:5px;height:1px;background:var(--accent);
-}
-
-/* ── SKILLS ── */
-#skills{border-top:1px solid var(--border);}
-.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:16px;overflow:hidden;}
-.skill-group{background:var(--surface);padding:2rem;transition:background 0.2s;}
-.skill-group:hover{background:var(--surface2);}
-.skill-group-title{
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.68rem;color:var(--accent);
-  letter-spacing:0.1em;text-transform:uppercase;
-  margin-bottom:1.2rem;
-}
-.skill-tags{display:flex;flex-wrap:wrap;gap:0.4rem;}
-.skill-tag{
-  background:rgba(255,255,255,0.04);
-  border:1px solid var(--border);
-  color:var(--muted);
-  font-size:0.75rem;font-weight:500;
-  padding:0.3rem 0.75rem;border-radius:6px;
-  transition:all 0.2s;cursor:default;
-}
-.skill-tag:hover{background:rgba(124,106,247,0.1);border-color:rgba(124,106,247,0.3);color:var(--ink);}
-
-/* ── PROJECTS ── */
-#projects{border-top:1px solid var(--border);}
-.projects-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:16px;overflow:hidden;}
-
-.project-card{
-  background:var(--surface);
-  padding:2.5rem;
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:2rem;
-  align-items:start;
-  position:relative;
-  overflow:hidden;
-  transition:background 0.3s;
-}
-.project-card::before{
-  content:'';
-  position:absolute;left:0;top:0;bottom:0;
-  width:3px;
-  background:var(--accent);
-  transform:scaleY(0);
-  transform-origin:bottom;
-  transition:transform 0.3s ease;
-}
-.project-card:hover{background:var(--surface2);}
-.project-card:hover::before{transform:scaleY(1);}
-
-.project-index{
-  position:absolute;top:2.5rem;right:2.5rem;
-  font-family:'Instrument Serif',serif;
-  font-size:4rem;font-style:italic;
-  color:rgba(255,255,255,0.03);
-  line-height:1;
-  pointer-events:none;
-}
-.project-type{
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.65rem;font-weight:400;
-  letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--accent2);
-  margin-bottom:0.75rem;
-}
-.project-name{
-  font-family:'Instrument Serif',serif;
-  font-size:1.5rem;
-  letter-spacing:-0.01em;
-  margin-bottom:0.75rem;
-}
-.project-desc{
-  font-size:0.88rem;color:var(--muted);
-  line-height:1.75;margin-bottom:1.2rem;
-  max-width:520px;
-}
-.project-chips{display:flex;flex-wrap:wrap;gap:0.4rem;}
-.chip{
-  font-size:0.7rem;
-  background:rgba(255,255,255,0.04);
-  border:1px solid var(--border);
-  color:var(--muted);
-  padding:0.2rem 0.6rem;border-radius:4px;
-}
-.project-link{
-  display:inline-flex;align-items:center;gap:0.4rem;
-  font-size:0.78rem;font-weight:600;
-  color:var(--accent);
-  text-decoration:none;
-  white-space:nowrap;
-  padding:0.6rem 1.2rem;
-  border:1px solid rgba(124,106,247,0.3);
-  border-radius:8px;
-  background:rgba(124,106,247,0.08);
-  transition:all 0.2s;
-  flex-shrink:0;
-}
-.project-link:hover{background:rgba(124,106,247,0.2);border-color:rgba(124,106,247,0.5);}
-.project-link svg{transition:transform 0.2s;}
-.project-link:hover svg{transform:translate(2px,-2px);}
-
-/* ── CONTACT ── */
-#contact{border-top:1px solid var(--border);}
-.contact-inner{max-width:700px;}
-.contact-heading{
-  font-family:'Instrument Serif',serif;
-  font-size:clamp(2.5rem,5vw,4.5rem);
-  line-height:1.05;
-  letter-spacing:-0.03em;
-  margin-bottom:1.2rem;
-}
-.contact-heading em{font-style:italic;color:var(--accent);}
-.contact-sub{font-size:1rem;color:var(--muted);line-height:1.8;margin-bottom:3rem;}
-
-.contact-email{
-  display:inline-block;
-  font-family:'Instrument Serif',serif;
-  font-size:clamp(1.2rem,2.5vw,1.8rem);
-  color:var(--ink);
-  text-decoration:none;
-  padding-bottom:4px;
-  border-bottom:1px solid rgba(255,255,255,0.15);
-  transition:color 0.2s,border-color 0.2s;
-  margin-bottom:2.5rem;
-}
-.contact-email:hover{color:var(--accent);border-color:var(--accent);}
-
-.contact-socials{display:flex;gap:0.75rem;flex-wrap:wrap;}
-.social-btn{
-  display:inline-flex;align-items:center;gap:0.5rem;
-  font-size:0.82rem;font-weight:600;
-  color:var(--muted);
-  text-decoration:none;
-  padding:0.65rem 1.3rem;
-  border:1px solid var(--border);
-  border-radius:8px;
-  background:var(--surface);
-  transition:all 0.2s;
-}
-.social-btn:hover{color:var(--ink);border-color:rgba(255,255,255,0.15);background:var(--surface2);}
-
-/* ── FOOTER ── */
-footer{
-  border-top:1px solid var(--border);
-  padding:1.5rem 0;
+  min-height:100svh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding-top:90px;padding-bottom:60px;
+  padding-left:var(--px);padding-right:var(--px);
+  max-width:var(--mw);margin:0 auto;
   position:relative;z-index:1;
 }
-.footer-inner{
-  max-width:1120px;margin:0 auto;padding:0 5vw;
-  display:flex;justify-content:space-between;align-items:center;
-}
-footer p{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted);}
-.back-top{
+.h-eye{
+  display:inline-flex;align-items:center;gap:0.5rem;
   font-family:'JetBrains Mono',monospace;
-  font-size:0.7rem;color:var(--muted);
-  text-decoration:none;
-  transition:color 0.2s;
+  font-size:clamp(0.62rem,1.8vw,0.75rem);
+  color:var(--accent3);margin-bottom:1.5rem;
+  opacity:0;animation:up 0.8s 0.1s both;
 }
-.back-top:hover{color:var(--ink);}
+.h-eye::before{content:'>';color:var(--accent);}
+.h-name{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(2.8rem,10vw,7.5rem);
+  line-height:0.95;letter-spacing:-0.03em;
+  margin-bottom:0.4rem;
+  opacity:0;animation:up 0.9s 0.2s both;
+}
+.h-name i{
+  display:block;font-style:italic;color:var(--muted);
+  padding-left:clamp(0rem,4vw,3rem);
+}
+.h-role{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(0.72rem,2vw,0.95rem);
+  color:var(--muted);
+  margin:1.4rem 0 1.8rem;
+  display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;
+  opacity:0;animation:up 0.9s 0.3s both;
+}
+.h-role::before{content:'';width:28px;height:1px;background:var(--border);flex-shrink:0;}
+.h-desc{
+  font-size:clamp(0.88rem,2.2vw,1.05rem);
+  color:var(--muted);max-width:540px;
+  line-height:1.8;margin-bottom:2.2rem;
+  opacity:0;animation:up 0.9s 0.4s both;
+}
+.h-desc strong{color:var(--ink);font-weight:600;}
+.h-btns{
+  display:flex;gap:0.7rem;flex-wrap:wrap;
+  opacity:0;animation:up 0.9s 0.5s both;
+}
+.btn-a{
+  background:var(--accent);color:var(--white);
+  font-family:'Syne',sans-serif;font-size:clamp(0.78rem,2vw,0.88rem);font-weight:600;
+  padding:0.78rem clamp(1.1rem,3vw,1.8rem);border-radius:8px;text-decoration:none;
+  box-shadow:0 0 30px rgba(124,106,247,0.3);transition:transform 0.2s,box-shadow 0.2s;white-space:nowrap;
+}
+.btn-a:hover{transform:translateY(-2px);box-shadow:0 6px 40px rgba(124,106,247,0.5);}
+.btn-b{
+  color:var(--muted);border:1px solid var(--border);
+  font-family:'Syne',sans-serif;font-size:clamp(0.78rem,2vw,0.88rem);font-weight:500;
+  padding:0.78rem clamp(1.1rem,3vw,1.8rem);border-radius:8px;text-decoration:none;
+  transition:all 0.2s;white-space:nowrap;
+}
+.btn-b:hover{border-color:rgba(255,255,255,0.2);color:var(--ink);}
+.h-stats{
+  display:flex;flex-wrap:wrap;gap:1px;
+  background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  margin-top:3rem;
+  opacity:0;animation:up 0.9s 0.6s both;
+}
+.sbox{
+  flex:1;min-width:80px;background:var(--surface);
+  padding:1.1rem 0.8rem;text-align:center;transition:background 0.2s;
+}
+.sbox:hover{background:var(--surface2);}
+.sn{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(1.5rem,4vw,2.4rem);
+  line-height:1;color:var(--ink);margin-bottom:0.3rem;
+}
+.sn b{color:var(--accent);font-weight:400;}
+.sl{font-size:0.62rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;}
+.scroll-hint{
+  display:flex;flex-direction:column;align-items:flex-start;gap:0.4rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;
+  margin-top:2.5rem;
+  opacity:0;animation:up 1s 1s both;
+}
+.scl{width:1px;height:28px;background:linear-gradient(to bottom,var(--accent),transparent);animation:sp 2s ease-in-out infinite;}
+@keyframes sp{0%,100%{opacity:0.4;}50%{opacity:1;}}
 
-/* ── ANIMATIONS ── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:none;}}
-.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease;}
+/* ─── SHARED SECTIONS ─── */
+section{padding:clamp(56px,9vw,100px) 0;position:relative;z-index:1;}
+section+section{border-top:1px solid var(--border);}
+.slabel{
+  font-family:'JetBrains Mono',monospace;font-size:0.66rem;
+  color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:2.5rem;display:flex;align-items:center;gap:0.75rem;
+}
+.slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+
+/* ─── ABOUT ─── */
+.ag{display:grid;grid-template-columns:1fr 320px;gap:clamp(2rem,5vw,5rem);align-items:start;}
+@media(max-width:800px){.ag{grid-template-columns:1fr;}}
+.ah{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(1.4rem,4vw,2.8rem);
+  line-height:1.2;letter-spacing:-0.02em;margin-bottom:1.4rem;
+}
+.ah i{font-style:italic;color:var(--accent);}
+.at{font-size:clamp(0.84rem,2vw,0.95rem);color:var(--muted);line-height:1.85;margin-bottom:0.9rem;}
+.at strong{color:var(--ink);font-weight:600;}
+.acard{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+.aphoto{width:100%;height:190px;object-fit:cover;object-position:top center;display:block;filter:grayscale(15%);}
+.ainfo{padding:1.2rem 1.4rem;}
+.arow{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;
+  padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;
+}
+.arow:last-child{border-bottom:none;}
+.ak{color:var(--muted);flex-shrink:0;}
+.av{color:var(--ink);text-align:right;word-break:break-word;}
+.av a{color:var(--accent);text-decoration:none;}
+.av a:hover{text-decoration:underline;}
+
+/* ─── EXPERIENCE ─── */
+.eitem{
+  display:grid;grid-template-columns:155px 1fr;
+  gap:clamp(1rem,3vw,3rem);
+  padding:2.2rem 0;border-bottom:1px solid var(--border);
+  position:relative;
+}
+.eitem:last-child{border-bottom:none;}
+@media(min-width:680px){
+  .eitem::before{
+    content:'';position:absolute;
+    left:145px;top:0;bottom:0;
+    width:1px;background:var(--border);
+  }
+  .eitem::after{
+    content:'';position:absolute;
+    left:141px;top:2.4rem;
+    width:9px;height:9px;border-radius:50%;
+    background:var(--surface);border:1.5px solid var(--border);
+    transition:border-color 0.3s,background 0.3s;
+  }
+  .eitem:hover::after{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px rgba(124,106,247,0.6);}
+}
+@media(max-width:679px){
+  .eitem{grid-template-columns:1fr;gap:0.5rem;padding:1.8rem 0;}
+  .emeta{display:flex;align-items:center;flex-wrap:wrap;gap:0.5rem;}
+}
+.ep{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted);line-height:1.6;}
+.ebadge{
+  display:inline-block;font-size:0.58rem;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;
+  padding:0.2rem 0.55rem;border-radius:4px;margin-top:0.5rem;
+}
+@media(max-width:679px){.ebadge{margin-top:0;}}
+.bn{background:rgba(124,106,247,0.15);color:var(--accent);border:1px solid rgba(124,106,247,0.3);}
+.bf{background:rgba(106,247,200,0.1);color:var(--accent3);border:1px solid rgba(106,247,200,0.25);}
+.bi{background:rgba(247,162,106,0.1);color:var(--accent2);border:1px solid rgba(247,162,106,0.25);}
+.etitle{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(1.05rem,3vw,1.4rem);
+  letter-spacing:-0.01em;margin-bottom:0.2rem;
+}
+.eco{font-size:0.8rem;color:var(--muted);margin-bottom:0.9rem;}
+.eul{list-style:none;display:flex;flex-direction:column;gap:0.42rem;}
+.eul li{
+  font-size:clamp(0.78rem,1.8vw,0.84rem);color:var(--muted);line-height:1.7;
+  padding-left:1rem;position:relative;
+}
+.eul li::before{content:'';position:absolute;left:0;top:0.68em;width:5px;height:1px;background:var(--accent);}
+
+/* ─── SKILLS ─── */
+.sgrid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);border-radius:16px;overflow:hidden;
+}
+@media(max-width:680px){.sgrid{grid-template-columns:1fr;}}
+@media(min-width:681px) and (max-width:900px){.sgrid{grid-template-columns:repeat(2,1fr);}}
+.sgroup{background:var(--surface);padding:clamp(1.2rem,3vw,2rem);transition:background 0.2s;}
+.sgroup:hover{background:var(--surface2);}
+.sgt{
+  font-family:'JetBrains Mono',monospace;font-size:0.64rem;
+  color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;
+}
+.stags{display:flex;flex-wrap:wrap;gap:0.38rem;}
+.stag{
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  color:var(--muted);font-size:clamp(0.66rem,1.5vw,0.74rem);font-weight:500;
+  padding:0.26rem 0.65rem;border-radius:6px;transition:all 0.2s;cursor:default;
+}
+.stag:hover{background:rgba(124,106,247,0.1);border-color:rgba(124,106,247,0.3);color:var(--ink);}
+
+/* ─── PROJECTS ─── */
+.plist{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:16px;overflow:hidden;}
+.pcard{
+  background:var(--surface);padding:clamp(1.4rem,4vw,2.4rem);
+  display:flex;flex-direction:column;gap:1.2rem;
+  position:relative;overflow:hidden;transition:background 0.3s;
+}
+@media(min-width:580px){
+  .pcard{flex-direction:row;align-items:flex-start;justify-content:space-between;gap:1.8rem;}
+}
+.pcard::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--accent);
+  transform:scaleY(0);transform-origin:bottom;transition:transform 0.3s;
+}
+.pcard:hover{background:var(--surface2);}
+.pcard:hover::before{transform:scaleY(1);}
+.pbody{flex:1;min-width:0;}
+.pidx{
+  position:absolute;top:1.2rem;right:1.4rem;
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(2rem,6vw,4rem);font-style:italic;
+  color:rgba(255,255,255,0.03);line-height:1;pointer-events:none;
+}
+.ptype{
+  font-family:'JetBrains Mono',monospace;font-size:0.61rem;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:0.5rem;
+}
+.pname{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(1.1rem,3vw,1.5rem);letter-spacing:-0.01em;margin-bottom:0.5rem;
+}
+.pdesc{font-size:clamp(0.8rem,1.8vw,0.88rem);color:var(--muted);line-height:1.75;margin-bottom:0.9rem;}
+.pchips{display:flex;flex-wrap:wrap;gap:0.32rem;}
+.chip{
+  font-size:0.66rem;background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);color:var(--muted);
+  padding:0.16rem 0.52rem;border-radius:4px;
+}
+.plink{
+  display:inline-flex;align-items:center;gap:0.38rem;
+  font-size:0.76rem;font-weight:600;color:var(--accent);text-decoration:none;
+  padding:0.55rem 1rem;border:1px solid rgba(124,106,247,0.3);
+  border-radius:8px;background:rgba(124,106,247,0.08);
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;align-self:flex-start;
+}
+.plink:hover{background:rgba(124,106,247,0.2);border-color:rgba(124,106,247,0.5);}
+.plink svg{transition:transform 0.2s;}
+.plink:hover svg{transform:translate(2px,-2px);}
+
+/* ─── CONTACT ─── */
+.cinner{max-width:660px;}
+.ch{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(1.8rem,7vw,4.5rem);
+  line-height:1.05;letter-spacing:-0.03em;margin-bottom:1rem;
+}
+.ch i{font-style:italic;color:var(--accent);}
+.cs{font-size:clamp(0.86rem,2vw,1rem);color:var(--muted);line-height:1.8;margin-bottom:2.2rem;}
+.cemail{
+  display:inline-block;
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(0.95rem,3vw,1.8rem);
+  color:var(--ink);text-decoration:none;
+  padding-bottom:3px;border-bottom:1px solid rgba(255,255,255,0.15);
+  transition:color 0.2s,border-color 0.2s;margin-bottom:2.2rem;
+  word-break:break-all;
+}
+.cemail:hover{color:var(--accent);border-color:var(--accent);}
+.csoc{display:flex;gap:0.6rem;flex-wrap:wrap;}
+.sbtn{
+  display:inline-flex;align-items:center;gap:0.42rem;
+  font-size:clamp(0.74rem,2vw,0.82rem);font-weight:600;
+  color:var(--muted);text-decoration:none;
+  padding:0.58rem 1.05rem;border:1px solid var(--border);
+  border-radius:8px;background:var(--surface);
+  transition:all 0.2s;white-space:nowrap;
+}
+.sbtn:hover{color:var(--ink);border-color:rgba(255,255,255,0.15);background:var(--surface2);}
+
+/* ─── FOOTER ─── */
+footer{border-top:1px solid var(--border);padding:1.4rem 0;position:relative;z-index:1;}
+.fin{
+  max-width:var(--mw);margin:0 auto;padding:0 var(--px);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;
+}
+footer p{font-family:'JetBrains Mono',monospace;font-size:0.66rem;color:var(--muted);}
+.bt{font-family:'JetBrains Mono',monospace;font-size:0.66rem;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.bt:hover{color:var(--ink);}
+
+/* ─── ANIMATIONS ─── */
+@keyframes up{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.65s ease,transform 0.65s ease;}
 .reveal.on{opacity:1;transform:none;}
-.d1{transition-delay:0.07s;}.d2{transition-delay:0.14s;}.d3{transition-delay:0.21s;}.d4{transition-delay:0.28s;}
-
-/* ── RESPONSIVE ── */
-@media(max-width:900px){
-  .hero-stats{position:static;transform:none;flex-direction:row;flex-wrap:wrap;margin-top:3rem;}
-  .stat-box{flex:1;min-width:100px;}
-  .about-grid{grid-template-columns:1fr;}
-  .exp-item{grid-template-columns:1fr;gap:0.5rem;}
-  .exp-item::before,.exp-item::after{display:none;}
-  .skills-grid{grid-template-columns:1fr;}
-  .project-card{grid-template-columns:1fr;}
-  .project-link{width:fit-content;}
-}
-@media(max-width:600px){
-  .hero-name{padding-left:0;}
-  .hero-name .line2{padding-left:0;}
-}
+.d1{transition-delay:0.07s;}.d2{transition-delay:0.14s;}.d3{transition-delay:0.21s;}
 </style>
 </head>
 <body>
@@ -530,81 +381,52 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--mut
 
 <!-- NAV -->
 <nav>
-  <div class="nav-inner">
-    <a href="#hero" class="nav-logo">Ajinkya <span>.</span>dev</a>
+  <div class="nav-in">
+    <a href="#hero" class="nav-logo">Ajinkya <b>.</b>dev</a>
     <a href="mailto:ajinkyawp2026@gmail.com" class="nav-pill">
-      <span class="nav-dot"></span> Available for work
+      <span class="ndot"></span> Available for work
     </a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="container">
-    <div class="hero-content">
-      <div class="hero-eyebrow">android_developer.kt — 3 years experience</div>
-      <h1 class="hero-name">
-        Ajinkya
-        <em class="line2">Waghmode</em>
-      </h1>
-      <p class="hero-role">Android Developer · Hyderabad, India</p>
-      <p class="hero-desc">
-        Crafting <strong>scalable mobile experiences</strong> with Kotlin &amp; Jetpack Compose. Specialized in MVVM architecture, REST APIs, and shipping production apps to the Play Store.
-      </p>
-      <div class="hero-actions">
-        <a href="#projects" class="btn-primary">View Projects</a>
-        <a href="#contact" class="btn-outline">Get in Touch</a>
-      </div>
-    </div>
-
-    <div class="hero-stats">
-      <div class="stat-box">
-        <div class="stat-n">3<span>+</span></div>
-        <div class="stat-l">Years Exp</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-n">4</div>
-        <div class="stat-l">Live Apps</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-n">3</div>
-        <div class="stat-l">Companies</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-n">10<span>+</span></div>
-        <div class="stat-l">Tech Stack</div>
-      </div>
-    </div>
+  <div class="h-eye">android_developer.kt — 3 years experience</div>
+  <h1 class="h-name">Ajinkya<i>Waghmode</i></h1>
+  <p class="h-role">Android Developer · Hyderabad, India</p>
+  <p class="h-desc">Crafting <strong>scalable mobile experiences</strong> with Kotlin &amp; Jetpack Compose. Specialized in MVVM architecture, REST APIs, and shipping production apps to the Play Store.</p>
+  <div class="h-btns">
+    <a href="#projects" class="btn-a">View Projects</a>
+    <a href="#contact" class="btn-b">Get in Touch</a>
   </div>
-  <div class="scroll-hint">
-    <span>scroll</span>
-    <div class="scroll-line"></div>
+  <div class="h-stats">
+    <div class="sbox"><div class="sn">3<b>+</b></div><div class="sl">Years Exp</div></div>
+    <div class="sbox"><div class="sn">4</div><div class="sl">Live Apps</div></div>
+    <div class="sbox"><div class="sn">3</div><div class="sl">Companies</div></div>
+    <div class="sbox"><div class="sn">10<b>+</b></div><div class="sl">Tech Stack</div></div>
   </div>
+  <div class="scroll-hint"><span>scroll</span><div class="scl"></div></div>
 </section>
 
 <!-- ABOUT -->
 <section id="about">
-  <div class="container">
-    <div class="section-label reveal">About</div>
-    <div class="about-grid">
+  <div class="wrap">
+    <div class="slabel reveal">About</div>
+    <div class="ag">
       <div>
-        <h2 class="about-heading reveal">A developer who cares about <em>clean code</em> and real impact.</h2>
-        <p class="about-text reveal d1">
-          I'm an Android developer with <strong>3 years of hands-on experience</strong> building and shipping production apps used by thousands. I've worked across fintech, social platforms, delivery, and enterprise maintenance tools.
-        </p>
-        <p class="about-text reveal d2">
-          I care about architecture, performance, and writing code that's easy to maintain. I enjoy working with cross-functional teams and turning complex requirements into smooth, reliable user experiences.
-        </p>
+        <h2 class="ah reveal">A developer who cares about <i>clean code</i> and real impact.</h2>
+        <p class="at reveal d1">I'm an Android developer with <strong>3 years of hands-on experience</strong> building and shipping production apps used by thousands. I've worked across fintech, social platforms, delivery, and enterprise maintenance tools.</p>
+        <p class="at reveal d2">I care about architecture, performance, and writing code that's easy to maintain. I enjoy working with cross-functional teams and turning complex requirements into smooth, reliable user experiences.</p>
       </div>
       <div class="reveal d2">
-        <div class="about-card">
-          <img class="about-photo" src="/mnt/user-data/uploads/Ajinkya_Avinash_Waghmode.png" alt="Ajinkya Waghmode" onerror="this.style.display='none'"/>
-          <div class="about-info">
-            <div class="info-row"><span class="info-key">Location</span><span class="info-val">Hyderabad, India</span></div>
-            <div class="info-row"><span class="info-key">Phone</span><span class="info-val">+91-9373126858</span></div>
-            <div class="info-row"><span class="info-key">Email</span><span class="info-val"><a href="mailto:ajinkyawp2026@gmail.com">ajinkyawp2026@gmail.com</a></span></div>
-            <div class="info-row"><span class="info-key">LinkedIn</span><span class="info-val"><a href="https://www.linkedin.com/in/ajinkya-waghmode-43443129b/" target="_blank">ajinkya-waghmode ↗</a></span></div>
-            <div class="info-row"><span class="info-key">Education</span><span class="info-val">B.Tech, E&T<br>Shivaji University '23</span></div>
+        <div class="acard">
+          <img class="aphoto" src="/mnt/user-data/uploads/Ajinkya_Avinash_Waghmode.png" alt="Ajinkya Waghmode" onerror="this.style.display='none'"/>
+          <div class="ainfo">
+            <div class="arow"><span class="ak">Location</span><span class="av">Hyderabad, India</span></div>
+            <div class="arow"><span class="ak">Phone</span><span class="av">+91-9373126858</span></div>
+            <div class="arow"><span class="ak">Email</span><span class="av"><a href="mailto:ajinkyawp2026@gmail.com">ajinkyawp2026@gmail.com</a></span></div>
+            <div class="arow"><span class="ak">LinkedIn</span><span class="av"><a href="https://www.linkedin.com/in/ajinkya-waghmode-43443129b/" target="_blank">ajinkya-waghmode ↗</a></span></div>
+            <div class="arow"><span class="ak">Education</span><span class="av">B.Tech E&amp;T<br>Shivaji Uni '23</span></div>
           </div>
         </div>
       </div>
@@ -614,108 +436,95 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--mut
 
 <!-- EXPERIENCE -->
 <section id="experience">
-  <div class="container">
-    <div class="section-label reveal">Experience</div>
-    <div class="exp-timeline">
+  <div class="wrap">
+    <div class="slabel reveal">Experience</div>
 
-      <div class="exp-item reveal">
-        <div class="exp-meta">
-          <div class="exp-period">Oct 2024<br>Present</div>
-          <span class="exp-badge badge-now">● Current</span>
-        </div>
-        <div class="exp-body">
-          <h3 class="exp-title">Android Developer</h3>
-          <p class="exp-company">Techmatic Systems · Full-time</p>
-          <ul class="exp-bullets">
-            <li>Develop and maintain native Android apps using Kotlin and Java with focus on robust functionality and smooth UX.</li>
-            <li>Implemented MVVM architecture to improve app scalability and long-term maintainability.</li>
-            <li>Integrated REST APIs using Retrofit for efficient data communication between app and backend.</li>
-            <li>Leveraged Jetpack components — ViewModel, LiveData, Room — to optimize responsiveness and data management.</li>
-            <li>Collaborate with cross-functional teams to deliver reliable, feature-rich applications on schedule.</li>
-          </ul>
-        </div>
+    <div class="eitem reveal">
+      <div class="emeta">
+        <div class="ep">Oct 2024<br>Present</div>
+        <span class="ebadge bn">● Current</span>
       </div>
-
-      <div class="exp-item reveal">
-        <div class="exp-meta">
-          <div class="exp-period">Jun 2023<br>Jul 2024</div>
-          <span class="exp-badge badge-ft">Full-time</span>
-        </div>
-        <div class="exp-body">
-          <h3 class="exp-title">Android Developer</h3>
-          <p class="exp-company">Satmat Technologies · Full-time · 15 months</p>
-          <ul class="exp-bullets">
-            <li>Maintained and improved MLC Data, Wazir Wallet, Magic Pe, and SG Scanner — reducing crash rates and boosting stability.</li>
-            <li>Implemented RESTful APIs using Retrofit and Volley for reliable mobile–server communication.</li>
-            <li>Integrated payment gateways and SMS gateway services to enhance app functionality.</li>
-            <li>Maintained high code quality through consistent Git version control practices and code reviews.</li>
-          </ul>
-        </div>
+      <div>
+        <h3 class="etitle">Android Developer</h3>
+        <p class="eco">Techmatic Systems · Full-time</p>
+        <ul class="eul">
+          <li>Develop and maintain native Android apps using Kotlin and Java with focus on robust functionality and smooth UX.</li>
+          <li>Implemented MVVM architecture to improve app scalability and long-term maintainability.</li>
+          <li>Integrated REST APIs using Retrofit for efficient data communication between app and backend.</li>
+          <li>Leveraged Jetpack components — ViewModel, LiveData, Room — to optimize responsiveness and data management.</li>
+          <li>Collaborate with cross-functional teams to deliver feature-rich applications on schedule.</li>
+        </ul>
       </div>
-
-      <div class="exp-item reveal">
-        <div class="exp-meta">
-          <div class="exp-period">Jan 2023<br>Jun 2023</div>
-          <span class="exp-badge badge-int">Internship</span>
-        </div>
-        <div class="exp-body">
-          <h3 class="exp-title">Android Developer Intern</h3>
-          <p class="exp-company">Blue Planet Infosolutions · 6 months</p>
-          <ul class="exp-bullets">
-            <li>Developed Smart Student, Smart Teacher, and Campus Radio Android applications from the ground up.</li>
-            <li>Fixed bugs and improved performance and stability across all three apps.</li>
-            <li>Worked with Kotlin, Java, Retrofit, and Volley for full API integration.</li>
-          </ul>
-        </div>
-      </div>
-
     </div>
+
+    <div class="eitem reveal">
+      <div class="emeta">
+        <div class="ep">Jun 2023<br>Jul 2024</div>
+        <span class="ebadge bf">Full-time</span>
+      </div>
+      <div>
+        <h3 class="etitle">Android Developer</h3>
+        <p class="eco">Satmat Technologies · 15 months</p>
+        <ul class="eul">
+          <li>Maintained and improved MLC Data, Wazir Wallet, Magic Pe, and SG Scanner — reducing crash rates and boosting stability.</li>
+          <li>Implemented RESTful APIs using Retrofit and Volley for reliable mobile–server communication.</li>
+          <li>Integrated payment gateways and SMS gateway services to enhance app functionality.</li>
+          <li>Maintained high code quality through consistent Git version control and code reviews.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="eitem reveal">
+      <div class="emeta">
+        <div class="ep">Jan 2023<br>Jun 2023</div>
+        <span class="ebadge bi">Internship</span>
+      </div>
+      <div>
+        <h3 class="etitle">Android Developer Intern</h3>
+        <p class="eco">Blue Planet Infosolutions · 6 months</p>
+        <ul class="eul">
+          <li>Developed Smart Student, Smart Teacher, and Campus Radio Android apps from the ground up.</li>
+          <li>Fixed bugs and improved performance and stability across all three applications.</li>
+          <li>Worked with Kotlin, Java, Retrofit, and Volley for full API integration.</li>
+        </ul>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <!-- SKILLS -->
 <section id="skills">
-  <div class="container">
-    <div class="section-label reveal">Skills &amp; Tools</div>
-    <div class="skills-grid reveal">
-      <div class="skill-group">
-        <div class="skill-group-title">Android Dev</div>
-        <div class="skill-tags">
-          <span class="skill-tag">Kotlin</span>
-          <span class="skill-tag">Java</span>
-          <span class="skill-tag">Jetpack Compose</span>
-          <span class="skill-tag">XML Layouts</span>
-          <span class="skill-tag">Android SDK</span>
-          <span class="skill-tag">MVVM</span>
-          <span class="skill-tag">LiveData</span>
-          <span class="skill-tag">ViewModel</span>
-          <span class="skill-tag">Dagger Hilt</span>
+  <div class="wrap">
+    <div class="slabel reveal">Skills &amp; Tools</div>
+    <div class="sgrid reveal">
+      <div class="sgroup">
+        <div class="sgt">Android Dev</div>
+        <div class="stags">
+          <span class="stag">Kotlin</span><span class="stag">Java</span>
+          <span class="stag">Jetpack Compose</span><span class="stag">XML Layouts</span>
+          <span class="stag">Android SDK</span><span class="stag">MVVM</span>
+          <span class="stag">LiveData</span><span class="stag">ViewModel</span>
+          <span class="stag">Dagger Hilt</span>
         </div>
       </div>
-      <div class="skill-group">
-        <div class="skill-group-title">APIs &amp; Data</div>
-        <div class="skill-tags">
-          <span class="skill-tag">Retrofit</span>
-          <span class="skill-tag">REST APIs</span>
-          <span class="skill-tag">Volley</span>
-          <span class="skill-tag">Gson</span>
-          <span class="skill-tag">Room DB</span>
-          <span class="skill-tag">SQLite</span>
-          <span class="skill-tag">Firebase</span>
-          <span class="skill-tag">Coroutines</span>
-          <span class="skill-tag">Flow</span>
+      <div class="sgroup">
+        <div class="sgt">APIs &amp; Data</div>
+        <div class="stags">
+          <span class="stag">Retrofit</span><span class="stag">REST APIs</span>
+          <span class="stag">Volley</span><span class="stag">Gson</span>
+          <span class="stag">Room DB</span><span class="stag">SQLite</span>
+          <span class="stag">Firebase</span><span class="stag">Coroutines</span>
+          <span class="stag">Flow</span>
         </div>
       </div>
-      <div class="skill-group">
-        <div class="skill-group-title">Tools &amp; Platforms</div>
-        <div class="skill-tags">
-          <span class="skill-tag">Git</span>
-          <span class="skill-tag">GitHub Copilot</span>
-          <span class="skill-tag">Claude Code</span>
-          <span class="skill-tag">Payment Gateway</span>
-          <span class="skill-tag">Push Notifications</span>
-          <span class="skill-tag">Google Play Store</span>
-          <span class="skill-tag">OpenClaw</span>
+      <div class="sgroup">
+        <div class="sgt">Tools &amp; Platforms</div>
+        <div class="stags">
+          <span class="stag">Git</span><span class="stag">GitHub Copilot</span>
+          <span class="stag">Claude Code</span><span class="stag">Payment Gateway</span>
+          <span class="stag">Push Notifications</span><span class="stag">Play Store</span>
+          <span class="stag">OpenClaw</span>
         </div>
       </div>
     </div>
@@ -724,72 +533,52 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--mut
 
 <!-- PROJECTS -->
 <section id="projects">
-  <div class="container">
-    <div class="section-label reveal">Projects</div>
-    <div class="projects-list reveal">
+  <div class="wrap">
+    <div class="slabel reveal">Projects</div>
+    <div class="plist reveal">
 
-      <div class="project-card">
-        <div>
-          <div class="project-index">01</div>
-          <div class="project-type">Maintenance &amp; IoT</div>
-          <h3 class="project-name">CIAL Project</h3>
-          <p class="project-desc">Android app for maintenance and equipment management. Field technicians track activities, manage equipment data, and submit inspection reports in real time with seamless backend sync.</p>
-          <div class="project-chips">
-            <span class="chip">Kotlin</span><span class="chip">MVVM</span><span class="chip">Retrofit</span><span class="chip">Room DB</span>
-          </div>
+      <div class="pcard">
+        <div class="pbody">
+          <div class="pidx">01</div>
+          <div class="ptype">Maintenance &amp; IoT</div>
+          <h3 class="pname">CIAL Project</h3>
+          <p class="pdesc">Android app for maintenance and equipment management. Field technicians track activities, manage equipment data, and submit inspection reports in real time.</p>
+          <div class="pchips"><span class="chip">Kotlin</span><span class="chip">MVVM</span><span class="chip">Retrofit</span><span class="chip">Room DB</span></div>
         </div>
-        <a href="https://play.google.com/store" target="_blank" class="project-link">
-          Play Store
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
+        <a href="https://play.google.com/store" target="_blank" class="plink">Play Store <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
 
-      <div class="project-card">
-        <div>
-          <div class="project-index">02</div>
-          <div class="project-type">Social Platform</div>
-          <h3 class="project-name">SIPN</h3>
-          <p class="project-desc">Social platform for bourbon enthusiasts to connect, discover rare bottles, share reviews, and purchase selected bourbons. Built with modern Android architecture and secure API integration.</p>
-          <div class="project-chips">
-            <span class="chip">Kotlin</span><span class="chip">Clean Architecture</span><span class="chip">Firebase</span>
-          </div>
+      <div class="pcard">
+        <div class="pbody">
+          <div class="pidx">02</div>
+          <div class="ptype">Social Platform</div>
+          <h3 class="pname">SIPN</h3>
+          <p class="pdesc">Social platform for bourbon enthusiasts to connect, discover rare bottles, share reviews, and purchase selected bourbons. Built with modern Android architecture.</p>
+          <div class="pchips"><span class="chip">Kotlin</span><span class="chip">Clean Architecture</span><span class="chip">Firebase</span></div>
         </div>
-        <a href="https://play.google.com/store" target="_blank" class="project-link">
-          Play Store
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
+        <a href="https://play.google.com/store" target="_blank" class="plink">Play Store <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
 
-      <div class="project-card">
-        <div>
-          <div class="project-index">03</div>
-          <div class="project-type">Delivery &amp; Commerce</div>
-          <h3 class="project-name">BottleRover</h3>
-          <p class="project-desc">Location-based alcohol delivery app. Users find nearby stores, reserve bottles, schedule pickup or delivery, and earn rewards. Contributed bug fixes, stability improvements, and new features.</p>
-          <div class="project-chips">
-            <span class="chip">Kotlin</span><span class="chip">Maps API</span><span class="chip">Retrofit</span>
-          </div>
+      <div class="pcard">
+        <div class="pbody">
+          <div class="pidx">03</div>
+          <div class="ptype">Delivery &amp; Commerce</div>
+          <h3 class="pname">BottleRover</h3>
+          <p class="pdesc">Location-based alcohol delivery app. Users find nearby stores, reserve bottles, schedule pickup or delivery, and earn rewards through orders.</p>
+          <div class="pchips"><span class="chip">Kotlin</span><span class="chip">Maps API</span><span class="chip">Retrofit</span></div>
         </div>
-        <a href="https://play.google.com/store" target="_blank" class="project-link">
-          Play Store
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
+        <a href="https://play.google.com/store" target="_blank" class="plink">Play Store <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
 
-      <div class="project-card">
-        <div>
-          <div class="project-index">04</div>
-          <div class="project-type">Fintech &amp; Payments</div>
-          <h3 class="project-name">Magic Pe</h3>
-          <p class="project-desc">Digital payment app for mobile recharges, utility bill payments, and instant cashback. Supports all major telecom operators with real-time secure transactions and a clean, intuitive interface.</p>
-          <div class="project-chips">
-            <span class="chip">Kotlin</span><span class="chip">MVVM</span><span class="chip">Dagger Hilt</span><span class="chip">Payment Gateway</span>
-          </div>
+      <div class="pcard">
+        <div class="pbody">
+          <div class="pidx">04</div>
+          <div class="ptype">Fintech &amp; Payments</div>
+          <h3 class="pname">Magic Pe</h3>
+          <p class="pdesc">Digital payment app for mobile recharges, utility bill payments, and instant cashback. Supports major telecom operators with real-time secure transactions.</p>
+          <div class="pchips"><span class="chip">Kotlin</span><span class="chip">MVVM</span><span class="chip">Dagger Hilt</span><span class="chip">Payment Gateway</span></div>
         </div>
-        <a href="https://play.google.com/store" target="_blank" class="project-link">
-          Play Store
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
+        <a href="https://play.google.com/store" target="_blank" class="plink">Play Store <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
 
     </div>
@@ -798,23 +587,23 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--mut
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="container">
-    <div class="contact-inner reveal">
-      <div class="section-label">Contact</div>
-      <h2 class="contact-heading">Have a project?<br><em>Let's build it.</em></h2>
-      <p class="contact-sub">Open to new Android development opportunities — freelance, contract, or full-time. Based in Hyderabad. I'll get back to you promptly.</p>
-      <a href="mailto:ajinkyawp2026@gmail.com" class="contact-email">ajinkyawp2026@gmail.com</a>
-      <div class="contact-socials">
-        <a href="https://www.linkedin.com/in/ajinkya-waghmode-43443129b/" target="_blank" class="social-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+  <div class="wrap">
+    <div class="cinner reveal">
+      <div class="slabel">Contact</div>
+      <h2 class="ch">Have a project?<br><i>Let's build it.</i></h2>
+      <p class="cs">Open to new Android development opportunities — freelance, contract, or full-time. Based in Hyderabad. I'll get back to you promptly.</p>
+      <a href="mailto:ajinkyawp2026@gmail.com" class="cemail">ajinkyawp2026@gmail.com</a>
+      <div class="csoc">
+        <a href="https://www.linkedin.com/in/ajinkya-waghmode-43443129b/" target="_blank" class="sbtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
           LinkedIn
         </a>
-        <a href="tel:+919373126858" class="social-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12.7a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.22 6.22l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.56z"/></svg>
+        <a href="tel:+919373126858" class="sbtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12.7a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.22 6.22l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.56z"/></svg>
           +91-9373126858
         </a>
-        <a href="https://play.google.com/store" target="_blank" class="social-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5v-17a1 1 0 0 1 1.47-.88l16 8.5a1 1 0 0 1 0 1.76l-16 8.5A1 1 0 0 1 3 20.5z"/></svg>
+        <a href="https://play.google.com/store" target="_blank" class="sbtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5v-17a1 1 0 0 1 1.47-.88l16 8.5a1 1 0 0 1 0 1.76l-16 8.5A1 1 0 0 1 3 20.5z"/></svg>
           Play Store
         </a>
       </div>
@@ -823,15 +612,15 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--mut
 </section>
 
 <footer>
-  <div class="footer-inner">
+  <div class="fin">
     <p>© 2026 Ajinkya Waghmode — Android Developer</p>
-    <a href="#hero" class="back-top">↑ back to top</a>
+    <a href="#hero" class="bt">↑ back to top</a>
   </div>
 </footer>
 
 <script>
 const obs=new IntersectionObserver(
-  entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');}),
+  e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on');}),
   {threshold:0.08}
 );
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
